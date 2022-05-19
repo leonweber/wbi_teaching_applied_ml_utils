@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+__version__ = '0.0.1'
+
 
 def plotData(x_train, y_train, x_test, y_test):
     plt.figure(figsize=(10,5))
