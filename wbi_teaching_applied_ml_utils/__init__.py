@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import exercise3_utils
 
 __version__ = '0.0.3'
 
