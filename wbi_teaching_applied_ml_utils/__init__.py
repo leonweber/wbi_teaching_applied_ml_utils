@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+__version__ = '0.0.3'
+
 
 def plotData(x_train, y_train, x_test, y_test):
     plt.figure(figsize=(10,5))
@@ -81,3 +83,11 @@ def plot_validation_curve(mse_train, mse_test, degrees):
     plt.legend(loc='best')
     plt.show()
 
+
+def plot_polynomial_rmse(polys, Ls_poly_train):
+    plt.figure(figsize=(8,5))  
+    plt.plot(polys, Ls_poly_train, '-', label="RMSE")
+    plt.xlabel('polynomial degree')
+    plt.ylabel('RMSE')
+    plt.title('RMSE for varying polynomial degrees')
+    _ = plt.legend(loc='best')
