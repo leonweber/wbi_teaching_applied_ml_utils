@@ -93,8 +93,8 @@ def plot_polynomial_rmse(polys, Ls_poly_train):
     _ = plt.legend(loc='best')
 
 class Exercise3Utils:
-    @classmethod
-    def plotData(cls, X, y):
+    @staticmethod
+    def plotData(X, y):
         fig = plt.figure(figsize=(12,8))
 
         # Find Indices of Positive and Negative Examples
@@ -110,8 +110,8 @@ class Exercise3Utils:
 
         plt.legend(['Admitted', 'Not admitted'])
 
-    @classmethod   
-    def mapFeature(cls, X1, X2, degree=6):
+    @staticmethod   
+    def mapFeature(X1, X2, degree=6):
         if X1.ndim > 0:
             out = [np.ones(X1.shape[0], dtype=np.float64)]
         else:
@@ -127,7 +127,7 @@ class Exercise3Utils:
             return np.array(out, dtype=np.float64)
 
     @staticmethod
-    def classmethod(cls, plotData, theta, X, y, degree=6):
+    def plotDecisionBoundary(plotData, theta, X, y, degree=6):
         # make sure theta is a numpy array
         theta = np.array(theta)
 
@@ -157,7 +157,7 @@ class Exercise3Utils:
             # Evaluate z = theta*x over the grid
             for i, ui in enumerate(u):
                 for j, vj in enumerate(v):
-                    z[i, j] = np.dot(cls.mapFeature(ui, vj, degree), theta)
+                    z[i, j] = np.dot(Exercise3Utils.mapFeature(ui, vj, degree), theta)
 
             z = z.T  # important to transpose z before calling contour
 
@@ -165,8 +165,8 @@ class Exercise3Utils:
 
         plt.tight_layout()
 
-    @classmethod
-    def vis_coef(cls, estimator, feature_names, topn = 10):
+    @staticmethod
+    def vis_coef(estimator, feature_names, topn = 10):
         """
         Visualize the top-n most influential coefficients
         for linear models.
