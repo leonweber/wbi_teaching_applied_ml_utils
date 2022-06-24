@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-__version__ = '0.0.7'
+__version__ = '0.0.8'
 
 
 def plotData(x_train, y_train, x_test, y_test):
@@ -228,9 +228,10 @@ class Exercise4Utils:
             
             # Show the classifier's boundary using a color plot
             Z = Z.reshape(xx1.shape)
-            plt.pcolormesh(xx1, xx2, Z, cmap=plt.cm.PRGn, vmin=-3, vmax=3)
+            plt.pcolormesh(xx1, xx2, Z, shading='auto', 
+                            cmap=plt.cm.PRGn, vmin=-3, vmax=3)
         
-    @staticmethod
+    @staticmethod 
     def display_data_and_boundary(x, y, w, predictMultiClass):
         
         #fig = plt.figure(figsize=(6,6))
@@ -260,16 +261,16 @@ class Exercise4Utils:
         
         # Show the classifier's boundary using a color plot
         Z = Z.reshape(xx1.shape)
-        plt.pcolormesh(xx1, xx2, Z, cmap=plt.cm.Pastel1, vmin=0, vmax=k)
+        plt.pcolormesh(xx1, xx2, Z, shading='auto', 
+            cmap=plt.cm.Pastel1, vmin=0, vmax=k)
         plt.show()
-
 
     @staticmethod
     def visualizeBoundary(X, y, clf):
         #fig = plt.figure(figsize=(6,6))
         Exercise4Utils.plotData(X, y)
 
-        h = .05  # step size in the mesh
+        h = .01  # step size in the mesh
 
         # create a mesh to plot in
         x_min, x_max = X[:, 0].min()-h, X[:, 0].max()+h
@@ -293,7 +294,7 @@ class Exercise4Utils:
         Exercise4Utils.plotData(X, y)
         
         # step size in the mesh
-        h = .05
+        h = .01
 
         # create a mesh to plot in
         x_min, x_max = X[:, 0].min()-h, X[:, 0].max()+h
