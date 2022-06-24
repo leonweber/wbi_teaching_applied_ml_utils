@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-__version__ = '0.0.3'
+__version__ = '0.0.7'
 
 
 def plotData(x_train, y_train, x_test, y_test):
@@ -187,3 +187,128 @@ class Exercise3Utils:
         plt.title('top {} positive/negative words'.format(topn))
 
         plt.tight_layout()
+
+
+class Exercise4Utils:
+    @staticmethod
+    def plotData(X, y, grid=False):
+        # Find Indices of Positive and Negative Examples
+        pos = y == 1
+        neg = y == 0
+
+        # Plot Examples
+        plt.plot(X[pos, 0], X[pos, 1], 'X', mew=1, ms=10, mec='k')
+        plt.plot(X[neg, 0], X[neg, 1], 'o', mew=1, mfc='y', ms=10, mec='k')
+        plt.grid(grid)
+
+
+    @staticmethod
+    def plotMargin(x, y, w, converged, predict) :
+        # Determine the x1- and x2- limits of the plot
+        x1min = min(x[:,0]) - 0.5
+        x1max = max(x[:,0]) + 0.5
+        x2min = min(x[:,1]) - 0.5
+        x2max = max(x[:,1]) + 0.5
+        
+        plt.xlim(x1min,x1max)
+        plt.ylim(x2min,x2max)
+        
+        # Plot the data points
+        plt.plot(x[(y==1),0], x[(y==1),1], 'ro')
+        plt.plot(x[(y==-1),0], x[(y==-1),1], 'k^')
+        # Construct a grid of points at which to evaluate the classifier
+        if converged:
+            grid_spacing = 0.02
+            xx1, xx2 = np.meshgrid(np.arange(x1min, x1max, grid_spacing), np.arange(x2min, x2max, grid_spacing))
+            grid = np.c_[xx1.ravel(), xx2.ravel()]
+
+            Grid = np.concatenate([np.ones((grid.shape[0], 1)), grid], axis=1)        
+            Z = np.array([predict(w,pt) for pt in Grid])
+            print (Z)
+            
+            # Show the classifier's boundary using a color plot
+            Z = Z.reshape(xx1.shape)
+            plt.pcolormesh(xx1, xx2, Z, cmap=plt.cm.PRGn, vmin=-3, vmax=3)
+        
+    @staticmethod
+    def display_data_and_boundary(x, y, w, predictMultiClass):
+        
+        #fig = plt.figure(figsize=(6,6))
+        
+        # Determine the x1- and x2- limits of the plot
+        x1min = min(x[:,0]) - 1
+        x1max = max(x[:,0]) + 1
+        x2min = min(x[:,1]) - 1
+        x2max = max(x[:,1]) + 1
+        plt.xlim(x1min,x1max)
+        plt.ylim(x2min,x2max)
+
+        # Plot the data points
+        k = int(max(y)) + 1
+        cols = ['ro', 'k^', 'b*','gx']
+        for label in range(k):
+            plt.plot(x[(y==label),0], x[(y==label),1], cols[label%4], markersize=8)
+        
+        # Construct a grid of points at which to evaluate the classifier
+        grid_spacing = 0.05
+        xx1, xx2 = np.meshgrid(np.arange(x1min, x1max, grid_spacing), np.arange(x2min, x2max, grid_spacing))
+        grid = np.c_[xx1.ravel(), xx2.ravel()]
+        
+        Grid = np.concatenate([np.ones((grid.shape[0], 1)), grid], axis=1)        
+        Z = np.array([predictMultiClass(w,pt) for pt in Grid])    
+        #Z = np.array([predictMultiClass(w, pt) for pt in grid])
+        
+        # Show the classifier's boundary using a color plot
+        Z = Z.reshape(xx1.shape)
+        plt.pcolormesh(xx1, xx2, Z, cmap=plt.cm.Pastel1, vmin=0, vmax=k)
+        plt.show()
+
+
+    @staticmethod
+    def visualizeBoundary(X, y, clf):
+        #fig = plt.figure(figsize=(6,6))
+        Exercise4Utils.plotData(X, y)
+
+        h = .05  # step size in the mesh
+
+        # create a mesh to plot in
+        x_min, x_max = X[:, 0].min()-h, X[:, 0].max()+h
+        y_min, y_max = X[:, 1].min()-h, X[:, 1].max()+h
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+
+        Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+
+        # Put the result into a color plot
+        Z = Z.reshape(xx.shape)
+        plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
+        
+        # Plot also the training points
+        plt.scatter(X[:, 0], X[:, 1], color="g", s=3)
+
+        plt.show()
+
+    @staticmethod
+    def visualizeBoundaryLinear(X, y, clf) :
+        #fig = plt.figure(figsize=(6,6))
+        Exercise4Utils.plotData(X, y)
+        
+        # step size in the mesh
+        h = .05
+
+        # create a mesh to plot in
+        x_min, x_max = X[:, 0].min()-h, X[:, 0].max()+h
+        y_min, y_max = X[:, 1].min()-h, X[:, 1].max()+h
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+
+        Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+
+        # Put the result into a color plot
+        Z = Z.reshape(xx.shape)
+        plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)
+        plt.axis('off')
+
+        # Plot also the training points
+        color_map = {-1: (1, 1, 1), 0: (0, 0, 0.9), 1: (1, 0, 0), 2: (0.8, 0.6, 0)}
+        colors = [color_map[y] for y in y]
+        plt.scatter(X[:, 0], X[:, 1], c=colors, edgecolors='black')
+        plt.show()
